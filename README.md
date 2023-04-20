@@ -17,7 +17,7 @@ Copy and paste below script to add city state country list in your website
 <option value="">Select City</option>
 </select>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="https://webco.ge/countrystatecity.js"></script>
+<script src="https://webco.ge/api/countrystatecity.js"></script>
 ```  
 
 #Note: 
