@@ -25,7 +25,7 @@
         }
 
 function locationInfo() {
-    var rootUrl = "api.php";
+    var rootUrl = "https://api.webco.ge/api.php";
     var call = new ajaxCall();
     this.getCities = function(id) {
         jQuery(".cities option:gt(0)").remove();
