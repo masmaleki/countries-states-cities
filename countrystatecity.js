@@ -25,7 +25,7 @@
         }
 
 function locationInfo() {
-    var rootUrl = "https://webco.ge/api/api.php";
+    var rootUrl = "api.php";
     var call = new ajaxCall();
     this.getCities = function(id) {
         jQuery(".cities option:gt(0)").remove();
@@ -59,9 +59,17 @@ function locationInfo() {
         call.send(data, url, method, function(data) {
             jQuery('.states').find("option:eq(0)").html("Select State");
             if(data.tp == 1){
+
                 jQuery.each(data['result'], function(key, val) {
-                    var option = jQuery('<option />');
-                    option.attr('value', val).text(val);
+                    // create new option element
+                    const option = document.createElement('option');
+                    // set the text content of the option element
+                    option.textContent = val;
+                    // set the value of the option element
+                    option.value = val;
+                    // set the data-countryId attribute of the option element
+                    option.setAttribute('data-state-id', key);
+                    // append the option element to the select element
                     jQuery('.states').append(option);
                 });
                 jQuery(".states").prop("disabled",false);
@@ -79,11 +87,17 @@ function locationInfo() {
         jQuery('.countries').find("option:eq(0)").html("Please wait..");
         call.send(data, url, method, function(data) {
             jQuery('.countries').find("option:eq(0)").html("Select Country");
-            console.log(data);
             if(data.tp == 1){
                 jQuery.each(data['result'], function(key, val) {
-                    var option = jQuery('<option />');
-                    option.attr('value', val).text(val);
+                    // create new option element
+                    const option = document.createElement('option');
+                    // set the text content of the option element
+                    option.textContent = val;
+                    // set the value of the option element
+                    option.value = val;
+                    // set the data-countryId attribute of the option element
+                    option.setAttribute('data-country-id', key);
+                    // append the option element to the select element
                     jQuery('.countries').append(option);
                 });
                 jQuery(".countries").prop("disabled",false);
@@ -100,8 +114,8 @@ jQuery(function() {
 var loc = new locationInfo();
 loc.getCountries();
  jQuery(".countries").on("change", function(ev) {
-        var countryId = jQuery(this).val();
-        if(countryId != ''){
+     var countryId = jQuery(this).find('option:selected').data('country-id');
+      if(countryId != ''){
         loc.getStates(countryId);
         }
         else{
@@ -109,8 +123,10 @@ loc.getCountries();
         }
     });
  jQuery(".states").on("change", function(ev) {
-        var stateId = jQuery(this).val();
-        if(stateId != ''){
+        var stateId = jQuery(this).data('state-id');
+     var stateId = jQuery(this).find('option:selected').data('state-id');
+
+     if(stateId != ''){
         loc.getCities(stateId);
         }
         else{

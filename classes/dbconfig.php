@@ -7,7 +7,7 @@ class dbconfig {
   // database password
   protected static $password = "";
   //database name
-  protected static $dbname = "countries";
+  protected static $dbname = "api";
 
   static $con;
 
@@ -22,7 +22,9 @@ class dbconfig {
         if(!$link) {
           throw new exception(mysqli_error($link));
         }
-        return $link;
+         mysqli_set_charset($link, 'utf8mb4');
+
+         return $link;
      } catch (Exception $e) {
        echo "Error: ".$e->getMessage();
      } 

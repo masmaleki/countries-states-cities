@@ -42,18 +42,8 @@ class location extends dbconfig {
 
 
 // Fetch all states list by country name
-    public static function getStates($countryName) {
+    public static function getStates($countryId) {
         try {
-            $query = "SELECT id, name FROM countries WHERE name = ?";
-            $stmt = dbconfig::$con->prepare($query);
-            $stmt->bind_param("s", $countryName);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if($result->num_rows < 1) {
-                throw new Exception($countryName . " ---Country not found.");
-            }
-            $countryId = $result->fetch_assoc()['id'];
-
             $stateQuery = "SELECT id, name FROM states WHERE country_id = ?";
             $stmt = dbconfig::$con->prepare($stateQuery);
             $stmt->bind_param("i", $countryId);
@@ -66,7 +56,7 @@ class location extends dbconfig {
             while($resultSet = $result->fetch_assoc()) {
                 $res[$resultSet['id']] = $resultSet['name'];
             }
-            $data = array('status'=>'success', 'c'=>$countryName, 'tp'=>1, 'msg'=>"States fetched successfully.", 'result'=>$res);
+            $data = array('status'=>'success', 'c'=>$countryId, 'tp'=>1, 'msg'=>"States fetched successfully.", 'result'=>$res);
         } catch (Exception $e) {
             $data = array('status'=>'error', 'tp'=>0, 'msg'=>$e->getMessage());
         } finally {
@@ -75,11 +65,11 @@ class location extends dbconfig {
     }
 
 // Fetch all cities list by state name
-    public static function getCities($stateName) {
+    public static function getCities($stateId) {
         try {
-            $query = "SELECT cities.id, cities.name FROM cities INNER JOIN states ON cities.state_id = states.id WHERE states.name = ?";
+            $query = "SELECT cities.id, cities.name FROM cities INNER JOIN states ON cities.state_id = states.id WHERE states.id = ?";
             $stmt = dbconfig::$con->prepare($query);
-            $stmt->bind_param("s", $stateName);
+            $stmt->bind_param("s", $stateId);
             $stmt->execute();
             $result = $stmt->get_result();
             if($result->num_rows < 1) {
